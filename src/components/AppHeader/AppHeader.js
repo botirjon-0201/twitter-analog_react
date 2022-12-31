@@ -1,6 +1,11 @@
 import "./AppHeader.css";
+import { useSelector } from "react-redux";
 
-const AppHeader = ({ allPosts, liked }) => {
+const AppHeader = () => {
+  const { data } = useSelector((state) => state);
+  const allPosts = data.length;
+  const liked = data.filter((item) => item.like).length;
+
   return (
     <div className="app-header d-flex">
       <h1>Botirjon Umurzoqov</h1>

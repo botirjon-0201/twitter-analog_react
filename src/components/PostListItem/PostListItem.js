@@ -1,37 +1,45 @@
 import React from "react";
 import "./PostListItem.css";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteItem,
+  onToggleImportant,
+  onToggleLiked,
+} from "../../redux/actions";
 
 export default function PostListItem(props) {
-  const { label, onDelete, onToggleImportant, onToggleLiked, important, like } =
-    props;
+  const { id, label, important, like } = props;
+  const { data } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   let classNames = "app-list-item d-flex justify-content-between";
-
-  if (important) {
-    classNames += " important";
-  }
-
-  if (like) {
-    classNames += " like";
-  }
+  classNames += important ? " important" : "";
+  classNames += like ? " like" : "";
 
   return (
     <div className={classNames}>
-      <span className="app-list-item-label" onClick={onToggleLiked}>
+      <span
+        className="app-list-item-label"
+        onClick={() => dispatch(onToggleLiked(id, data))}
+      >
         {label}
       </span>
       <div className="d-flex justify-content-center align-items-center">
         <button
           type="button"
           className="btn-star btn-sm"
-          onClick={onToggleImportant}
+          onClick={() => dispatch(onToggleImportant(id, data))}
         >
           <i className="fa fa-star"></i>
         </button>
-        <button type="button" onClick={onDelete} className="btn-trash btn-sm">
+        <button
+          type="button"
+          onClick={() => dispatch(deleteItem(id, data))}
+          className="btn-trash btn-sm"
+        >
           <i className="fa fa-trash"></i>
         </button>
-        <i className="fa fa-heart"></i>
+        <i className="fa-solid fa-thumbs-up"></i>
       </div>
     </div>
   );

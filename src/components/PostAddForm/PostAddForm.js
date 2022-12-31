@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import "./PostAddForm.css";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../../redux/actions";
+import { setText } from "../../redux/reducers/main_slice";
 
-export default function PostAddForm({ onAdd }) {
-  const [text, setText] = useState("");
+export default function PostAddForm() {
+  const { data, text } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  const onValueChange = (evnt) => {
-    setText(evnt.target.value);
-  };
-
-  const onSubmit = (evnt) => {
-    evnt.preventDefault();
-    onAdd(text);
-    setText("");
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addItem(text, data));
+    dispatch(setText(""));
   };
 
   return (
@@ -20,8 +20,8 @@ export default function PostAddForm({ onAdd }) {
         type="text"
         placeholder="What are you thinking about?"
         className="form-control new-post-label"
-        onChange={onValueChange}
         value={text}
+        onChange={(e) => dispatch(setText(e.target.value))}
       />
       <button type="submit" className="btn btn-outline-secondary">
         Add Post
